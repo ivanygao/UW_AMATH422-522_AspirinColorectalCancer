@@ -1,0 +1,33 @@
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Ignore Jupyter Lab workspace files
+.jupyterlab-settings
+.jupyter
+
+# Ignore Jupyter Notebook extension configuration
+.nbextensions
+.custom.js
+custom.css
+
+# Ignore metadata files
+.jlsp
+.log
+
+# Ignore environment and kernel files
+.env
+.envrc
+.venv
+__pycache__
+.pyc
+.pyo
+.pyd
+
+# Ignore Python package management files
+Pipfile
+Pipfile.lock
+poetry.lock
+
+# Ignore virtual environment
+env
+venv
