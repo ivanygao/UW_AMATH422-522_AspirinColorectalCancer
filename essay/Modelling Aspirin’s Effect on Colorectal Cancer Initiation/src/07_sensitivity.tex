@@ -1,0 +1,44 @@
+\section{Transition Matrix and Sensitivity Analysis}
+
+To compute the sensitivities, we first need to determine the transition matrix A. We can derive from the linearized approximation of the original ODE system, and each entry in this matrix represents the rate of crypt transition from stage i where i is the row index, to stage j where j is the column index.
+
+{\small
+\begin{equation}
+A = \begin{bmatrix}
+    1 - (R_{12} + R_{14}) & 0 & 0 & 0 & 0 & 0 \\
+    R_{12} & 1-(R_{23} + R_{25}) & 0 & 0 & 0 & 0\\
+    0 & R_{23} & (1-R_{36})+ \gamma_3 - \delta & 0 & 0 & R_{35}\\
+    R_{14} & 0 & 0 & (1-R_{45})+ \gamma_4 - \delta & 0 & 0\\
+    0 & R_{25} & 0 & R_{45} & (1-R_{56})+ \gamma_5 - \delta & R_{56}\\
+    0 & 0 & 0 & 0 & 0 & 1\\
+\end{bmatrix}    
+\end{equation}
+}
+
+From that transition matrix, we computed sensitivities by first calculating the dominant left and right eigenvector of that matrix using
+
+\begin{equation}
+\begin{cases}
+A \Vec{w} = \lambda \Vec{w}\;\;\;\;\text{left}\\
+A^T\Vec{v} = \lambda \Vec{v}\;\;\;\;\text{right}
+\end{cases}
+\end{equation}
+
+Applying the sensitivity formula to find the sensitivity of each transition from stage i to j. We have
+
+\begin{equation}
+s_{ij} = \frac{w_i \times v_j}{\Vec{w} \cdot \Vec{v}}
+\end{equation}
+
+The computed sensitivity matrix is shown below, and the max value entry is in row 3, column 3, indicating that the size of the total crypt population between stages 1 through 5 have the highest sensitivity to the stage 3 to stage 3 crypt transition. So the most relevant factor is how much the $n_3$ crypts are persisting year-to-year in the population.
+
+\begin{equation}
+S = \begin{bmatrix}
+    0 & 0 & 2.16*10^{-6} & 0 & 0 & 0 \\
+    0 & 0 & 1.04*10^{-3} & 0 & 0 & 0\\
+    0 & 0 & 1.00 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 & 0 & 0 \\
+    0 & 0 & 1.36*10^{-5} &0 & 0 & 0\\
+\end{bmatrix}
+\end{equation}

@@ -1,0 +1,101 @@
+\section{Linearization}
+
+Our system of ODEs is nonlinear due to the presence of the carrying capacity terms. This prevents us from doing the sensitivity analysis as the entries in our transition matrix are correlated with each other in a non-linear way. Hence, we need to perform a linearization of our ODE system to calculate the sensitivity matrix.
+
+The idea of linearization is straightforward. We believe that our nonlinear system behaves linearly in a small region around its equilibrium points. We can approximate such linear behavior through Taylor expansion around its equilibrium point.
+
+\begin{equation}
+f(\Vec{x}) \approx f(\Vec{x}_{eq}) + \frac{\partial f}{\partial x}\bigg|_{\Vec{x}_{eq}}(\Vec{x}-\Vec{x}_{eq})+O(h^2)
+\end{equation}
+
+Notice that the first term $f(\Vec{x}_{eq})$ is the system behaviour at the equilibrium point which by definition is zero. Hence we have,
+
+\begin{equation}
+f(\Vec{x}) \approx \frac{\partial f}{\partial x}\bigg|_{\Vec{x}_{eq}}(\Vec{x}-\Vec{x}_{eq}) = J*(\Vec{x}-\Vec{x}_{eq})
+\end{equation}
+
+Where J is the Jacobian matrix which is computed by taking the derivative with respect to all variables.
+
+\begin{equation}
+\renewcommand{\arraystretch}{1.5}
+J = \begin{bmatrix}
+\frac{\partial f}{\partial x}\bigg|_{\Vec{x}_{eq}}
+\end{bmatrix}
+= \begin{bmatrix}
+\frac{\partial\dot{n}_1}{\partial n_1} & \frac{\partial\dot{n}_1}{\partial n_2} & \frac{\partial\dot{n}_1}{\partial n_3} & \frac{\partial\dot{n}_1}{\partial n_4} & \frac{\partial\dot{n}_1}{\partial n_5} \\
+\frac{\partial\dot{n}_2}{\partial n_1} & \frac{\partial\dot{n}_2}{\partial n_2} & \frac{\partial\dot{n}_2}{\partial n_3} & \frac{\partial\dot{n}_2}{\partial n_4} & \frac{\partial\dot{n}_2}{\partial n_5} \\
+\frac{\partial\dot{n}_3}{\partial n_1} & \frac{\partial\dot{n}_3}{\partial n_2} & \frac{\partial\dot{n}_3}{\partial n_3} & \frac{\partial\dot{n}_3}{\partial n_4} & \frac{\partial\dot{n}_3}{\partial n_5} \\
+\frac{\partial\dot{n}_4}{\partial n_1} & \frac{\partial\dot{n}_4}{\partial n_2} & \frac{\partial\dot{n}_4}{\partial n_3} & \frac{\partial\dot{n}_4}{\partial n_4} & \frac{\partial\dot{n}_4}{\partial n_5} \\
+\frac{\partial\dot{n}_5}{\partial n_1} & \frac{\partial\dot{n}_5}{\partial n_2} & \frac{\partial\dot{n}_5}{\partial n_3} & \frac{\partial\dot{n}_5}{\partial n_4} & \frac{\partial\dot{n}_5}{\partial n_5}
+\end{bmatrix}
+\end{equation}
+
+To compute J, we first expand our system of odes as follows:
+
+\begin{equation}
+\begin{cases}
+\begin{aligned}
+    \dot{n}_1 &= -R_{12}n_1 - R_{14}n_1, \\
+    \dot{n}_2 &= R_{12}n_1 - R_{23}n_2 - R_{25}n_2, \\
+    \dot{n}_3 &= R_{23}n_2 - R_{36}n_3 + \gamma_3 n_3 
+    - \frac{\gamma_3 n_3^2}{K_A} - \frac{\gamma_3 n_3 n_4}{K_A} - \frac{\gamma_3 n_3 n_5}{K_A} - \delta n_3, \\
+    \dot{n}_4 &= R_{14}n_1 - R_{45}n_4 + \gamma_4 n_4 
+    - \frac{\gamma_4 n_4 n_3}{K_R} - \frac{\gamma_4 n_4^2}{K_R} - \frac{\gamma_4 n_4 n_5}{K_R} - \delta n_4, \\
+
+    %%
+    \dot{n}_5 &= R_{25}n_2 + [R_{45}n_4] - R_{56}n_5 + \gamma_5 n_5  %HERE IT SHOULD BE - R_{45}n_4???
+    %% 
+    
+    - \frac{\gamma_5 n_5 n_3}{K_R} - \frac{\gamma_5 n_5 n_4}{K_R} - \frac{\gamma_5 n_5^2}{K_R} - \delta n_5.
+\end{aligned}
+\end{cases}
+\end{equation}
+
+Taking derivative respect to all variables, $n_1, n_2, n_3, n_4, n_5$, gives us the Jacobian matrix.
+
+\begin{equation}
+\renewcommand{\arraystretch}{1.5}
+J = \begin{bmatrix}
+- R_{12} - R_{14} & 0 & 0 & 0 & 0 \\
+R_{12} & - R_{23} - R_{25} & 0 & 0 & 0 \\
+0 & R_{23} & A & - \frac{\gamma_3 n_3}{K_A} & - \frac{\gamma_3 n_3}{K_A} \\
+R_{14} & 0 & - \frac{\gamma_4 n_4}{K_R} &  B & - \frac{\gamma_4 n_4}{K_R} \\
+0 & R_{25} & - \frac{\gamma_5 n_5}{K_R} &  R_{45} - \frac{\gamma_5 n_5}{K_R} & C
+\end{bmatrix}
+\end{equation}
+
+\begin{align*}
+A &= -R_{36} + \gamma_3 - \frac{2 \gamma_3 n_3}{K_A} - \frac{\gamma_3 n_4}{K_A} - \frac{\gamma_3 n_5}{K_A} - \delta \\
+B &= -R_{45} + \gamma_4 - \frac{\gamma_4 n_3}{K_R} - \frac{2 \gamma_4 n_4}{K_R} - \frac{\gamma_4 n_5}{K_R} - \delta \\
+C &= -R_{56} + \gamma_5 - \frac{\gamma_5 n_3}{K_R} - \frac{\gamma_5 n_4}{K_R} - \frac{2 \gamma_5 n_5}{K_R} - \delta
+\end{align*}
+
+Bring in our equilibrium points which is $[\dot{n}_1, \dot{n}_2, \dot{n}_3, \dot{n}_4, \dot{n}_5] = \Vec{0}$. We have the following result.
+
+\begin{equation}
+\renewcommand{\arraystretch}{1.5}
+J_{eq} = \begin{bmatrix}
+- R_{12} - R_{14} & 0 & 0 & 0 & 0 \\
+R_{12} & - R_{23} - R_{25} & 0 & 0 & 0 \\
+0 & R_{23} & -R_{36} + \gamma_3 - \delta & 0 & 0 \\
+R_{14} & 0 & 0 & -R_{45} + \gamma_4 - \delta & 0 \\
+0 & R_{25} & 0 & R_{45} & -R_{56} + \gamma_5 - \delta
+\end{bmatrix}
+\end{equation}
+
+Then we multiply our variables back to restore the linearized system of odes. Notice that we also added back our last equation from the original nonlinear ode system. P is the probability of having a type 6 crypt and also our variable of interest. 
+
+\begin{equation}
+\begin{cases}
+\begin{aligned}
+    \dot{n}_1 &= -(R_{12} + R_{14})n_1, \\
+    \dot{n}_2 &= R_{12}n_1 - (R_{23} + R_{25})n_2, \\
+    \dot{n}_3 &= R_{23}n_2 - R_{36}n_3 + \gamma_3 n_3 - \delta n_3, \\
+    \dot{n}_4 &= R_{14}n_1 - R_{45}n_4 + \gamma_4 n_4 - \delta n_4, \\
+    \dot{n}_5 &= R_{25}n_2 + R_{45}n_4 - R_{56}n_5 + \gamma_5 n_5 - \delta n_5 \\
+    \dot{P} &= R_{36} n_3 + R_{56}n_5 (1-P)
+\end{aligned}
+\end{cases}
+\end{equation}
+
+We notice that this linearized ODE system looks very much the same as our original system. The only difference is that the carrying capacity term is gone. That term is the source of nonlinearity and now this resulting ODE system is linear.

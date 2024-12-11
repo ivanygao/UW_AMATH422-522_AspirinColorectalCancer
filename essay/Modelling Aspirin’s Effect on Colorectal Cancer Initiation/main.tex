@@ -1,0 +1,58 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{diagbox}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usepackage{placeins}
+\usepackage{indentfirst}
+\usepackage{pdfpages}
+
+%bibliography: biblatex-mla
+%cite a text with \autocite{<key>}
+%cite a page with \autocite[<page>]{<key>}
+%cite with a citational prenote with \autocite[<prenote>][<page>]{<key>}.
+%\printbibliography[title=References], \label{bib:mybiblio}
+\usepackage[american]{babel} 
+\usepackage{csquotes}
+\usepackage[style=apa]{biblatex}
+\addbibresource{ref.bib}    %Imports bibliography file
+
+\title{Sensitivity Analysis of Colorectal Cancer Initiation}
+\author{Yuan Gao, Benji Brown, Dora Layanto, Julien Goldstick}
+\date{\today}
+
+\begin{document}
+\setlength{\parindent}{1cm}
+\doublespacing % Per rubric
+\maketitle
+
+\input{src/01_introduction}
+\FloatBarrier
+\input{src/02_description}
+\FloatBarrier
+\input{src/03_reproduction}
+\FloatBarrier
+\input{src/04_researchQuestion}
+\FloatBarrier
+\input{src/05_linearization}
+\FloatBarrier
+\input{src/06_comparison}
+\FloatBarrier
+\input{src/07_sensitivity}
+\FloatBarrier
+\input{src/08_empirical}
+\FloatBarrier
+\input{src/09_conclusion }
+\FloatBarrier
+\input{src/10_futureDirections}
+\FloatBarrier
+\input{src/11_appendix}
+\FloatBarrier
+\printbibliography[title=References]
+
+\includepdf[pages={-}]{paper/elife-71953.pdf}
+\end{document}
